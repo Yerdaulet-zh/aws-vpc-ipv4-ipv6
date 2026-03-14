@@ -16,24 +16,36 @@ resource "aws_route_table" "private_ipv6_only" {
   }
 }
 
-resource "aws_route_table" "dual_stack_rt" {
+resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
-  # IPv4 Outbound (via NAT Gateway)
+  # IPv4 Public Routing
   route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat64.id
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
   }
 
-  # IPv6 Outbound (via Egress-Only IGW)
+  # IPv6 Public Routing
   route {
-    ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = aws_egress_only_internet_gateway.main.id
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.igw.id
   }
 
   tags = {
-    Name = "dual-stack-rt"
+    Name = "public-rt"
   }
+}
+
+# Associate with IPv4-only subnet
+resource "aws_route_table_association" "ipv4_public" {
+  subnet_id      = aws_subnet.ipv4_only.id
+  route_table_id = aws_route_table.public.id
+}
+
+# Associate with Dual-Stack subnet
+resource "aws_route_table_association" "dual_stack_public" {
+  subnet_id      = aws_subnet.dual_stack.id
+  route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "ipv6_only_assoc" {
@@ -41,7 +53,3 @@ resource "aws_route_table_association" "ipv6_only_assoc" {
   route_table_id = aws_route_table.private_ipv6_only.id
 }
 
-resource "aws_route_table_association" "dual_stack_assoc" {
-  subnet_id      = aws_subnet.dual_stack.id
-  route_table_id = aws_route_table.dual_stack_rt.id
-}
