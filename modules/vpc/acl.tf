@@ -1,5 +1,5 @@
 resource "aws_network_acl" "main" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.main.id
   tags = {
     Project = "${var.project_name}"
   }
@@ -49,11 +49,4 @@ resource "aws_netork_acl_rule" "ipv6_egress_ephemeral" {
   ipv6_cidr_block = "::/0"
   from_port       = 0
   to_port         = 65535
-}
-
-resource "aws_network_acl_association" "network_acl_association" {
-  for_each = aws_subnet.managed
-
-  network_acl_id = aws_network_acl.main.id
-  subnet_id      = each.value.id
 }
