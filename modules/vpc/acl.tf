@@ -50,3 +50,21 @@ resource "aws_netork_acl_rule" "ipv6_egress_ephemeral" {
   from_port       = 0
   to_port         = 65535
 }
+
+# Association for IPv4-only Subnet
+resource "aws_network_acl_association" "ipv4_only" {
+  network_acl_id = aws_network_acl.main.id
+  subnet_id      = aws_subnet.ipv4_only.id
+}
+
+# Association for Dual-Stack Subnet
+resource "aws_network_acl_association" "dual_stack" {
+  network_acl_id = aws_network_acl.main.id
+  subnet_id      = aws_subnet.dual_stack.id
+}
+
+# Association for IPv6-only Subnet
+resource "aws_network_acl_association" "ipv6_only" {
+  network_acl_id = aws_network_acl.main.id
+  subnet_id      = aws_subnet.ipv6_only.id
+}
