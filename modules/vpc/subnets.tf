@@ -1,6 +1,6 @@
 resource "aws_subnet" "ipv4_only" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, 1) # Carves a /28 from a /24
+  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 4, 1) # Carves a /28 from a /24
 
   tags = {
     Name = "ipv4-only-subnet"
@@ -9,7 +9,7 @@ resource "aws_subnet" "ipv4_only" {
 
 resource "aws_subnet" "dual_stack" {
   vpc_id          = aws_vpc.main.id
-  cidr_block      = cidrsubnet(aws_vpc.vpc.cidr_block, 4, 1) # Carves a /28 from a /24
+  cidr_block      = cidrsubnet(aws_vpc.main.cidr_block, 4, 1) # Carves a /28 from a /24
   ipv6_cidr_block = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 2)
 
   assign_ipv6_address_on_creation = true
