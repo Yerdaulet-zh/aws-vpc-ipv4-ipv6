@@ -1,4 +1,4 @@
-resource "aws_vpc" "vpc" {
+resource "aws_vpc" "main" {
   ipv4_ipam_pool_id   = aws_vpc_ipam_pool.ipv4.id
   ipv4_netmask_length = 24
 
