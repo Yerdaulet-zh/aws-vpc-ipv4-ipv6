@@ -40,7 +40,7 @@ resource "aws_network_acl_rule" "ipv6_ingress_ephemeral" {
   to_port         = 65535
 }
 
-resource "aws_netork_acl_rule" "ipv6_egress_ephemeral" {
+resource "aws_network_acl_rule" "ipv6_egress_ephemeral" {
   network_acl_id  = aws_network_acl.main.id
   rule_number     = 110
   egress          = true
